@@ -1,0 +1,310 @@
+/* Rivet Landing Page Styles */
+
+/* Base Styles */
+body {
+    background-color: #050505;
+    color: #fafafa;
+}
+
+/* Custom Cursor - Shows alongside default cursor for better UX */
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #a3e635;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, opacity 0.3s ease;
+    opacity: 1;
+    mix-blend-mode: screen;
+}
+
+
+.custom-cursor-trail {
+    width: 8px;
+    height: 8px;
+    background: #a3e635;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.2s ease;
+    box-shadow: 0 0 20px rgba(163, 230, 53, 0.6);
+    opacity: 1;
+    mix-blend-mode: screen;
+}
+
+
+/* Cursor hover states */
+body.cursor-hover .custom-cursor {
+    transform: scale(1.5);
+    background: rgba(163, 230, 53, 0.2);
+}
+
+/* Mobile: hide custom cursor */
+@media (max-width: 768px) {
+    body {
+        cursor: auto !important;
+    }
+
+    .custom-cursor,
+    .custom-cursor-trail {
+        display: none !important;
+    }
+}
+
+/* Glass Morphism Effect */
+.glass {
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Mesh Gradient Background */
+.mesh-gradient {
+    background: radial-gradient(at 0% 0%, rgba(163, 230, 53, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(54, 83, 20, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(20, 20, 20, 0.15) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(163, 230, 53, 0.05) 0px, transparent 50%);
+    transition: transform 0.5s ease-out;
+}
+
+/* Text Glow Effect */
+.text-glow {
+    text-shadow: 0 0 40px rgba(163, 230, 53, 0.3);
+}
+
+/* Code Window Shadow */
+.code-window {
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* 3D Tilt Effect */
+.tilt-card {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+
+.tilt-card:hover {
+    transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(1.02);
+}
+
+.tilt-card-inner {
+    transform: translateZ(20px);
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #a3e635, #84cc16);
+    z-index: 9999;
+    transform-origin: left;
+    transition: width 0.1s ease-out;
+    box-shadow: 0 0 10px rgba(163, 230, 53, 0.5);
+}
+
+/* Typewriter Cursor */
+.typewriter-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: #a3e635;
+    margin-left: 4px;
+    animation: blink 1s infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes blink {
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Mobile Menu */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 300px;
+    height: 100vh;
+    background: rgba(10, 10, 10, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 9997;
+    transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    padding: 80px 30px 30px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu.active {
+    right: 0;
+}
+
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9996;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 9998;
+    position: relative;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 2px;
+    background: #fafafa;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+}
+
+.mobile-menu nav a {
+    display: block;
+    padding: 15px 0;
+    font-size: 18px;
+    color: #fafafa;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: color 0.3s ease, padding-left 0.3s ease;
+}
+
+.mobile-menu nav a:hover {
+    color: #a3e635;
+    padding-left: 10px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a3e635;
+}
+
+/* Smooth Scroll Behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Copy Button Hover Effect */
+.copy-btn {
+    transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+    transform: translateY(-1px);
+}
+
+.copy-btn.copied {
+    background-color: #84cc16 !important;
+    color: white !important;
+}
+
+/* Parallax Elements */
+.parallax-bg {
+    will-change: transform;
+}
+
+.parallax-float {
+    will-change: transform;
+}
+
+/* Stats Counter */
+.stats-number {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Code Line Animation */
+.code-line {
+    opacity: 0;
+    animation: fadeInLine 0.3s ease forwards;
+}
+
+@keyframes fadeInLine {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Performance optimizations */
+.group {
+    will-change: transform;
+}
+
+/* Fade in animation for intersection observer */
+.fade-in {
+    animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -423,22 +423,17 @@ if (modalCard) {
     });
 
     // Mobile Gyroscope Tilt
-    window.addEventListener('deviceorientation', (e) => {
+    function handleOrientation(e) {
         if (modal.style.display === 'none') return;
 
         // Beta: front-to-back tilt [-180, 180]
         // Gamma: left-to-right tilt [-90, 90]
 
-        // Clamp values to avoid extreme flipping
-        // We want a subtle effect, so we'll divide the raw values
-        // Resting position is usually beta ~ 45-60 (holding phone), gamma ~ 0
-
         let rotateX = 0;
         let rotateY = 0;
 
-        if (e.beta && e.gamma) {
+        if (e.beta !== null && e.gamma !== null) {
             // Adjust beta relative to a "holding" angle of ~45 degrees
-            // If they hold it flat (0), it tilts forward. Upright (90), tilts back.
             rotateX = ((e.beta - 45) / 45) * -15;
             rotateY = (e.gamma / 45) * 15;
 
@@ -448,7 +443,28 @@ if (modalCard) {
 
             modalCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         }
-    });
+    }
+
+    // iOS 13+ requires permission
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // Request permission on first interaction
+        const grantPermission = () => {
+            DeviceOrientationEvent.requestPermission()
+                .then(response => {
+                    if (response === 'granted') {
+                        window.addEventListener('deviceorientation', handleOrientation);
+                    }
+                })
+                .catch(console.error)
+                .finally(() => {
+                    document.removeEventListener('click', grantPermission);
+                });
+        };
+        document.addEventListener('click', grantPermission);
+    } else {
+        // Non-iOS or older devices
+        window.addEventListener('deviceorientation', handleOrientation);
+    }
 
     // Reset on mouse leave? No, let it float based on cursor position always when open
 }

@@ -352,3 +352,75 @@ document.querySelectorAll('.group').forEach(el => {
 console.log('%c⚡ Rivet Framework', 'color: #a3e635; font-size: 24px; font-weight: bold;');
 console.log('%cBuilt with Dart. Powered by performance.', 'color: #fafafa; font-size: 14px;');
 console.log('%cInterested in contributing? Check out https://github.com/supratim1609/rivet', 'color: #a1a1aa; font-size: 12px;');
+
+// ============================================
+// 13. LAUNCH CONFETTI
+// ============================================
+window.addEventListener('load', () => {
+    const duration = 3000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(function () {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+            return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+
+        // since particles fall down, start a bit higher than random
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    }, 250);
+});
+// ============================================
+// 14. ANNOUNCEMENT MODAL LOGIC
+// ============================================
+const modal = document.getElementById('announcement-modal');
+const closeModalBtn = document.getElementById('close-modal');
+const modalBackdrop = document.getElementById('modal-backdrop');
+const modalCard = document.getElementById('modal-card');
+
+function closeModal() {
+    if (modal) {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+}
+
+if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+
+// 3D Tilt for Modal
+if (modalCard) {
+    document.addEventListener('mousemove', (e) => {
+        if (modal.style.display === 'none') return;
+
+        const rect = modalCard.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        // Only tilt if mouse is somewhat near the center of screen to avoid weird jumps
+        // or just base it on screen position relative to center
+        const screenCenterX = window.innerWidth / 2;
+        const screenCenterY = window.innerHeight / 2;
+
+        const rotateX = ((e.clientY - screenCenterY) / screenCenterY) * -15; // Max 15deg tilt
+        const rotateY = ((e.clientX - screenCenterX) / screenCenterX) * 15;
+
+        modalCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    // Reset on mouse leave? No, let it float based on cursor position always when open
+}

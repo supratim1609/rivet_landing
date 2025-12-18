@@ -422,5 +422,33 @@ if (modalCard) {
         modalCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     });
 
+    // Mobile Gyroscope Tilt
+    window.addEventListener('deviceorientation', (e) => {
+        if (modal.style.display === 'none') return;
+
+        // Beta: front-to-back tilt [-180, 180]
+        // Gamma: left-to-right tilt [-90, 90]
+
+        // Clamp values to avoid extreme flipping
+        // We want a subtle effect, so we'll divide the raw values
+        // Resting position is usually beta ~ 45-60 (holding phone), gamma ~ 0
+
+        let rotateX = 0;
+        let rotateY = 0;
+
+        if (e.beta && e.gamma) {
+            // Adjust beta relative to a "holding" angle of ~45 degrees
+            // If they hold it flat (0), it tilts forward. Upright (90), tilts back.
+            rotateX = ((e.beta - 45) / 45) * -15;
+            rotateY = (e.gamma / 45) * 15;
+
+            // Clamp roughly to the same -15 to 15 range
+            rotateX = Math.max(-15, Math.min(15, rotateX));
+            rotateY = Math.max(-15, Math.min(15, rotateY));
+
+            modalCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        }
+    });
+
     // Reset on mouse leave? No, let it float based on cursor position always when open
 }
